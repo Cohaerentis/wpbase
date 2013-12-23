@@ -1,4 +1,4 @@
 <?php
-    if (!empty($size))                      $class .= ' fa-' . $size;
+    if (!empty($size))                      $css_class .= ' fa-' . $size;
 ?>
-<span class="fa-stack <?php echo $class; ?>" <?php if (!empty($id)) : ?>id="<?php echo $id; ?>"<?php endif; ?>><?php echo do_shortcode($content); ?></span>
+<span class="fa-stack <?php echo $css_class; ?>" <?php if (!empty($css_id)) : ?>id="<?php echo $css_id; ?>"<?php endif; ?>><?php echo do_shortcode($content); ?></span>

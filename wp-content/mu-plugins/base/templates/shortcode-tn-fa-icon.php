@@ -1,10 +1,10 @@
 <?php
-    if (!empty($size))                      $class .= ' fa-' . $size;
-    if (strtolower($border) == 'yes')       $class .= ' fa-border';
-    if (strtolower($fixed_width) == 'yes')  $class .= ' fa-fw';
-    if (strtolower($spin) == 'yes')         $class .= ' fa-spin';
-    if (strtolower($inverse) == 'yes')      $class .= ' fa-inverse';
-    if (!empty($rotate))                    $class .= ' fa-' . $rotate;
-    if (!empty($stack))                     $class .= ' fa-stack-' . $stack;
+    if (!empty($size))                      $css_class .= ' fa-' . $size;
+    if (strtolower($border) == 'yes')       $css_class .= ' fa-border';
+    if (strtolower($fixed_width) == 'yes')  $css_class .= ' fa-fw';
+    if (strtolower($spin) == 'yes')         $css_class .= ' fa-spin';
+    if (strtolower($inverse) == 'yes')      $css_class .= ' fa-inverse';
+    if (!empty($rotate))                    $css_class .= ' fa-' . $rotate;
+    if (!empty($stack))                     $css_class .= ' fa-stack-' . $stack;
 ?>
-<i class="fa fa-<?php echo $name; ?> <?php echo $class; ?>"<?php if (!empty($id)) : ?>id="<?php echo $id; ?>"<?php endif; ?>></i>
+<i class="fa fa-<?php echo $name; ?> <?php echo $css_class; ?>"<?php if (!empty($css_id)) : ?>id="<?php echo $css_id; ?>"<?php endif; ?>></i>

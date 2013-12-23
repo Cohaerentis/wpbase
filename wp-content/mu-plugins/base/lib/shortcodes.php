@@ -81,8 +81,8 @@ function base_shortcode_tn_modal($atts, $content) {
       'btn_type'     => 'primary',
       'btn_size'     => 'lg',
       'btn_p_class'  => '',
-      'class'        => '',
-      'id'           => '',
+      'css_class'    => '',
+      'css_id'       => '',
       'submit_link'  => '',
       'submit_label' => 'Submit',
       'submit_type'  => 'primary',
@@ -112,8 +112,8 @@ function base_shortcode_tn_fa_icon($atts) {
       'rotate'       => '',   // rotate-90, rotate-180, rotate-270, flip-horizontal, flip-vertical
       'stack'        => '',   // x1, x2, x3, x4, x5
       'inverse'      => 'no', // yes, no
-      'id'           => '',
-      'class'        => '',
+      'css_id'       => '',
+      'css_class'    => '',
    ), $atts));
 
    ob_start();
@@ -132,8 +132,8 @@ add_shortcode($prefix . 'tn_fa_icon', 'base_shortcode_tn_fa_icon');
 function base_shortcode_tn_fa_stack($atts, $content) {
    extract(shortcode_atts(array(
       'size'         => '', // lg, x2, x3, x4, x5
-      'id'           => '',
-      'class'        => '',
+      'css_id'       => '',
+      'css_class'    => '',
    ), $atts));
 
    ob_start();

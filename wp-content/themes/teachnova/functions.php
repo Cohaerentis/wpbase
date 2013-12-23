@@ -24,6 +24,7 @@ require_once locate_template('/lib/custom.php');          // Custom functions
 /* AEA - For debugging propuses * /
 ini_set( 'error_reporting', -1 );
 ini_set( 'display_errors', 'On' );
+/* */
 
 /* AEA - For debugging request parsing errors * /
 echo '<pre>';
