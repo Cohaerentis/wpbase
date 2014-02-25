@@ -1,0 +1,61 @@
+// Mixins
+// --------------------------
+
+.glyphicons-rotate(@degrees, @rotation) {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=@rotation);
+  -webkit-transform: rotate(@degrees);
+     -moz-transform: rotate(@degrees);
+      -ms-transform: rotate(@degrees);
+       -o-transform: rotate(@degrees);
+          transform: rotate(@degrees);
+}
+
+.glyphicons-flip(@horiz, @vert, @rotation) {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=@rotation, mirror=1);
+  -webkit-transform: scale(@horiz, @vert);
+     -moz-transform: scale(@horiz, @vert);
+      -ms-transform: scale(@horiz, @vert);
+       -o-transform: scale(@horiz, @vert);
+          transform: scale(@horiz, @vert);
+}
+
+// Rotated & Flipped Icons
+// -------------------------
+
+.glyphicons-rotate-90  { .glyphicons-rotate(90deg, 1);  }
+.glyphicons-rotate-180 { .glyphicons-rotate(180deg, 2); }
+.glyphicons-rotate-270 { .glyphicons-rotate(270deg, 3); }
+
+.glyphicons-flip-horizontal { .glyphicons-flip(-1, 1, 0); }
+.glyphicons-flip-vertical   { .glyphicons-flip(1, -1, 2); }
+
+// Spinning Icons
+// --------------------------
+
+.glyphicons-spin {
+  -webkit-animation: gspin 2s infinite linear;
+  -moz-animation: gspin 2s infinite linear;
+  -o-animation: gspin 2s infinite linear;
+  animation: gspin 2s infinite linear;
+}
+
+@-moz-keyframes gspin {
+  0% { -moz-transform: rotate(0deg); }
+  100% { -moz-transform: rotate(359deg); }
+}
+@-webkit-keyframes gspin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(359deg); }
+}
+@-o-keyframes gspin {
+  0% { -o-transform: rotate(0deg); }
+  100% { -o-transform: rotate(359deg); }
+}
+@-ms-keyframes gspin {
+  0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(359deg); }
+}
+@keyframes gspin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(359deg); }
+}

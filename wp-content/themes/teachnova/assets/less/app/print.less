@@ -1,0 +1,26 @@
+// App common print styles
+// --------------------------------------------------
+
+@media print {
+
+  a,
+  a:visited {
+    text-decoration: none;
+  }
+
+  @page {
+    margin: 2cm .5cm;
+  }
+
+  .entry-content {
+    a[href]:after {
+      display: none!important;
+    }
+  }
+
+  // COMMON
+
+  .wrap{
+    margin: 0 0 0 0!important;
+  }
+}

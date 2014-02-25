@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+
+.background-rgba(@color; @opacity) {
+   background: rgba(red(@color), green(@color), blue(@color), @opacity);
+}
+.glyphicons-social-colors {
+   &.linked_in{ color: @linkedin-color; }
+   &.twitter{ color: @twitter-color; }
+   &.rss{ color: @rss-color; }
+   &.facebook{ color: @facebook-color; }
+   &.google_plus{ color: @google-color; }
+}
+.social-icons-inline(@align: left; @size: 22px; @margin: 8px) {
+   list-style: none;
+   padding: 0;
+   text-align: @align;
+   li {
+      display: inline;
+      font-size: @size;
+      margin-right: @margin;
+      a {
+         &:hover {
+            .glyphicons-social-colors;
+            .glyphicons-colors;
+         }
+      }
+   }
+}
+.social-icons-inline-right(@size: 22px; @margin: 8px) {
+   list-style: none;
+   padding: 0;
+   text-align: right;
+   li {
+      display: inline;
+      font-size: @size;
+      margin-left: @margin;
+      a {
+         &:hover {
+            .glyphicons-social-colors;
+         }
+      }
+   }
+}
+
+.icon-box (@height: 200px; @width: 200px; @bgcolor: blue; @color: snow; @labelsize: 1.6em; @labelcolor: black) {
+   display: block;
+   &:hover,
+   a:hover {
+      text-decoration: none;
+   }
+   .box-icon {
+      &:hover {
+         background-color: @color;
+         .glyphicons,
+         .glyphicons-social,
+         .glyphicons-filetypes {
+            color: @bgcolor;
+         }
+      }
+      .glyphicons,
+      .glyphicons-social,
+      .glyphicons-filetypes {
+         padding-top: (@width * 0.1);
+      }
+      font-size: (@width / 2);
+      border-radius: (@width - 20px);
+      height: @height;
+      width: @width;
+      margin: 0 auto;
+      background-color: @bgcolor;
+      text-align: center;
+      color: snow;
+      display: block;
+   }
+   .box-label{
+      font-size: @labelsize;
+      display: block;
+      color: @labelcolor;
+      text-align: center;
+      margin-top: 8px;
+      height: 40px;
+   }
+}
+
+.icon-special (@size: 50px; @padding: 7px; @iconsize: 34px; @color: snow; @bgcolor: blue) {
+   background-color: @bgcolor;
+   padding-left: @padding;
+   border-radius: 180px;
+   border: 1px solidub @bgcolor;
+   color: @color;
+   width: @size;
+   height: @size;
+   font-size: @iconsize;
+   display: inline-block;
+}
+
+.info-marker{
+   content: "";
+   border-style: solid;
+   border-width: 18px;
+   width: 0;
+   height: 0;
+   position: relative;
+   margin: auto;
+}
+.info-marker-down(@color: blue){
+   .info-marker;
+   border-color: @color transparent transparent transparent;
+}
+.info-marker-up(@color: blue){
+   .info-marker;
+   border-color: transparent transparent @color transparent;
+}
+.info-marker-left(@color: blue){
+   .info-marker;
+   border-color: transparent @color transparent transparent;
+}
+.info-marker-right(@color: blue){
+   .info-marker;
+   border-color: transparent transparent transparent @color;
+}
+
+.no-border{
+   border: none;
+   outline: none;
+}
+.no-padding {
+   padding: 0;
+}

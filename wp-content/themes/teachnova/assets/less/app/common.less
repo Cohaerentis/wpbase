@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Common
+   ========================================================================== */
+
+.wrap {
+   @media (min-width: @screen-hs-min) {}
+   @media (min-width: @screen-sm-min) {}
+   @media (min-width: @screen-md-min) {}
+   @media (min-width: @screen-lg-min) {}
+}
+
+
+/* ==========================================================================
+   Bugfixes, WP Admin bar at buttom to avoid visual problems with fixed-top header
+   ========================================================================== */
+
+#wpadminbar { top:auto; bottom:0 }
+#wpadminbar .quicklinks li#wp-admin-bar-my-account.with-avatar > a img {margin: 6px 6px 0;}
+@media screen and (max-width: 782px) {
+   #wpadminbar .quicklinks li#wp-admin-bar-my-account.with-avatar > a img { top: 3px; }
+}
+@media screen and (max-width: 600px) {
+   #wpadminbar { position: fixed; }
+}
+
+/* ==========================================================================
+   WordPress Generated Classes
+   See: http://codex.wordpress.org/CSS#WordPress_Generated_Classes
+   ========================================================================== */
+
+.aligncenter { display: block; margin: 0 auto; }
+.alignleft { float: left; }
+.alignright { float: right; }
+figure.alignnone { margin-left: 0; margin-right: 0; }
