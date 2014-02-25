@@ -93,10 +93,7 @@ if (isset($_GET['error'])) {?>
 					<p><?php _e('2-letters ISO 639-1 language code (for example: en)', 'polylang');?></p>
 				</div>
 
-				<?php /* AEA - Workaround for CSS bug in these radio inputs
 				<div class="form-field"><fieldset>
-				*/ ?>
-				<div class="form-field-bugfix"><fieldset>
 					<legend><?php _e('Text direction', 'polylang');?></legend><?php
 					printf(
 						'<label><input name="rtl" type="radio" value="0" %s /> %s</label>',
@@ -186,20 +183,6 @@ case 'settings': ?><?php
 				</td>
 			</tr><?php
 		}?>
-
-
-		<tr>
-			<th><?php _e('Detect browser language', 'polylang');?></th>
-			<td>
-				<label><?php
-					printf(
-						'<input name="browser" type="checkbox" value="1" %s /> %s',
-						$this->options['browser'] ? 'checked="checked"' :'',
-						__('When the front page is visited, set the language according to the browser preference', 'polylang')
-					);?>
-				</label>
-			</td>
-		</tr>
 
 		<tr>
 			<th rowspan = <?php echo ($page_on_front ? 3 : 2) + $using_permalinks; ?>><?php _e('URL modifications', 'polylang') ?></th>
@@ -312,7 +295,20 @@ case 'settings': ?><?php
 					</p>
 				</fieldset></td>
 			</tr><?php
-		}?>
+		} ?>
+
+		<tr id="pll-detect-browser" <?php echo 3 > $this->options['force_lang'] ? '' : 'style="display: none;"'; ?>>
+			<th><?php _e('Detect browser language', 'polylang');?></th>
+			<td>
+				<label><?php
+					printf(
+						'<input name="browser" type="checkbox" value="1" %s /> %s',
+						$this->options['browser'] ? 'checked="checked"' :'',
+						__('When the front page is visited, set the language according to the browser preference', 'polylang')
+					);?>
+				</label>
+			</td>
+		</tr>
 
 		<tr>
 			<th scope="row"><?php _e('Media', 'polylang') ?></th>

@@ -1,42 +1,19 @@
-var gLabels={
+var labels={
     title:"Label Shortcode",
-    id :'#oscitas-form-label'
+    id :'oscitas-form-label',
+    pluginName: 'labels'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasLabels', {
-        init : function(ed, url) {
-            ed.addButton('oscitaslabels', {
-                title : 'Label Shortcode',
-                image : url+'/icon.png',
-                onclick : function() {
-                    create_oscitas_label();
-                    open_dialogue(gLabels.id);
-                }
-            });
-        },
-        createControl : function(n, cm) {
-            return null;
-        },
-        getInfo : function() {
-            return {
-                longname : "Label Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitaslabels', tinymce.plugins.oscitasLabels);
+    _create_tinyMCE_options(labels);
 })();
 
-function create_oscitas_label(){
-    if(jQuery('#oscitas-form-label').length){
-        jQuery('#oscitas-form-label').remove();
+function create_oscitas_labels(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-label" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th><label for="oscitas-label-type">Label Type:</label></th>\
 				<td><select name="type" id="oscitas-label-type">\
@@ -64,18 +41,19 @@ function create_oscitas_label(){
 			<input type="button" id="oscitas-label-submit" class="button-primary" value="Insert Label" name="submit" />\
 		</p>\
 		</div>');
-		
+
     var table = form.find('table');
     form.appendTo('body').hide();
-   
 
-        
-		
+
+
+
     // handles the click event of the submit button
     form.find('#oscitas-label-submit').click(function(){
         var cusclass='';
         if(table.find('#oscitas-label-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-label-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            cusclass= ' css_class="'+table.find('#oscitas-label-class').val()+'"';
         }
         var shortcode = '[label type="'+jQuery('#oscitas-label-type').val()+'"'+cusclass+']<br/>';
         shortcode += jQuery('#oscitas-label-content').val()+'<br/>';
@@ -83,9 +61,9 @@ function create_oscitas_label(){
 
         // inserts the shortcode into the active editor
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-			
+
         // closes fancybox
-        close_dialogue(gLabels.id);
+        close_dialogue(pluginObj.hashId);
     });
 }
 

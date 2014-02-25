@@ -4,14 +4,16 @@ function osc_theme_notification($atts, $content = null) {
     extract(shortcode_atts(array(
                 'type' => '',
                 'close' => 'false',
-                'class' => ''
+                // AEA - Rename 'class' parameter by 'css_class'
+                'css_class' => ''
                     ), $atts));
     $type = ($close == 'true' ? $type . ' alert-dismissable' : $type);
 
 
-    $result = '<div class = "alert ' . $type . ' ' . $class . '">';
+    // AEA - Rename 'class' parameter by 'css_class'
+    $result = '<div class = "alert ' . $type . ' ' . $css_class .EBS_CONTAINER_CLASS. '">';
     if ($close == 'true') {
-        $result .= '<button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true">&times;
+        $result .= '<button type = "button" class = "close'.EBS_CONTAINER_CLASS.'" data-dismiss = "alert" aria-hidden = "true">&times;
     </button>';
     }
     $result .= do_shortcode($content);

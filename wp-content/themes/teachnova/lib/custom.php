@@ -15,3 +15,5 @@
 }
 add_action( 'pre_get_posts', 'post_type_activity_order' );
 */
+// AEA - Remove the default padding styles from WordPress for the Toolbar
+add_theme_support( 'admin-bar', array( 'callback' => '__return_false' ) );

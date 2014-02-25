@@ -3,12 +3,14 @@
 function osc_theme_panel($atts, $content = null) {
     extract(shortcode_atts(array(
                 'style' => '',
-                'class' => ''
+                // AEA - Rename 'class' parameter by 'css_class'
+                'css_class' => ''
                     ), $atts));
     $content = str_replace("]<br />", ']', $content);
 
     $content = str_replace("<br />\n[", '[', $content);
-    $result = '<div class="panel ' . $style . ' ' . $class . '">';
+    // AEA - Rename 'class' parameter by 'css_class'
+    $result = '<div class="panel ' . $style . ' ' . $css_class . EBS_CONTAINER_CLASS.'">';
     $result .= do_shortcode($content);
     $result .= '</div>';
 
@@ -18,7 +20,7 @@ function osc_theme_panel($atts, $content = null) {
 add_shortcode('panel', 'osc_theme_panel');
 
 function osc_theme_panel_footer($atts, $content = null) {
-    $result = '<div class="panel-footer">';
+    $result = '<div class="panel-footer'.EBS_CONTAINER_CLASS.'">';
     $result .= do_shortcode($content);
     $result .= '</div>';
     return $result;
@@ -27,7 +29,7 @@ function osc_theme_panel_footer($atts, $content = null) {
 add_shortcode('panel-footer', 'osc_theme_panel_footer');
 
 function osc_theme_panel_heading($atts, $content = null) {
-    $result = '<div class="panel-heading">';
+    $result = '<div class="panel-heading'.EBS_CONTAINER_CLASS.'">';
     $result .= do_shortcode($content);
     $result .= '</div>';
     return $result;
@@ -36,7 +38,7 @@ function osc_theme_panel_heading($atts, $content = null) {
 add_shortcode('panel-header', 'osc_theme_panel_heading');
 
 function osc_theme_panel_content($atts, $content = null) {
-    $result = '<div class="panel-body">';
+    $result = '<div class="panel-body'.EBS_CONTAINER_CLASS.'">';
     $result .= do_shortcode($content);
     $result .= '</div>';
     return $result;

@@ -6,12 +6,29 @@
 
 function osc_theme_row($params, $content = null) {
     extract(shortcode_atts(array(
-        'class' => '',
+        'mdhide' => '',
+        'smhide' => '',
+        'hshide' => '', // AEA - Horizontal Small Devices
+        'xshide' => '',
+        'lghide' => '',
+        'css_class' => '',
         'tag' => 'div' // AEA - Allow user to set custom HTML tag
     ), $params));
+
+    $classes = array($css_class);
+    // AEA - Horizontal Small Devices
+    // $arr2 = array('mdhide', 'smhide', 'xshide', 'lghide');
+    $arr2 = array('mdhide', 'smhide', 'hshide', 'xshide', 'lghide');
+    foreach ($arr2 as $k => $aa) {
+        $nn = str_replace('hide', '', $aa);
+        if (${$aa} == 'yes') {
+            $classes[] = 'hidden-' . $nn;
+        }
+    }
+
     // AEA - Allow user to set custom HTML tag
-    // $result = '<div class="row ' . $class . '">';
-    $result = '<' . $tag . ' class="row ' . $class . '">';
+    // $result = '<div class="row ' . $css_class . '">';
+    $result = '<' . $tag . ' class="row ' . implode(' ', $classes) . EBS_CONTAINER_CLASS . '">';
     //echo '<textarea>'.$content.'</textarea>';
     $content = str_replace("]<br />", ']', $content);
     $content = str_replace("<br />\n[", '[', $content);
@@ -38,38 +55,47 @@ function osc_theme_column($params, $content = null) {
     extract(shortcode_atts(array(
         'md' => '',
         'sm' => '',
+        'hs' => '', // AEA - Horizontal Small Devices
         'xs' => '',
         'lg' => '',
         'mdoff' => '',
         'smoff' => '',
+        'hsoff' => '', // AEA - Horizontal Small Devices
         'xsoff' => '',
         'lgoff' => '',
         'mdhide' => '',
         'smhide' => '',
+        'hshide' => '', // AEA - Horizontal Small Devices
         'xshide' => '',
         'lghide' => '',
         'mdclear' => '',
+        'hsclear' => '', // AEA - Horizontal Small Devices
         'smclear' => '',
         'xsclear' => '',
         'lgclear' => '',
         'off'=>'',
-        'class' => '', // AEA - Allow user to add custom class
+        'css_class' => '', // AEA - Allow user to add custom class
         'tag' => 'div' // AEA - Allow user to set custom HTML tag
     ), $params));
 
 
-    $arr = array('md', 'xs', 'sm');
+    // AEA - Horizontal Small Devices
+    // $arr = array('md', 'xs', 'sm');
+    $arr = array('lg', 'md', 'sm', 'hs', 'xs');
     // AEA - Allow user to add custom class
     // $classes = array();
-    $classes = array($class);
+    $classes = array($css_class);
     foreach ($arr as $k => $aa) {
+        ${$aa} = trim(${$aa});
         if (${$aa} == 12 || ${$aa} == '') {
             $classes[] = 'col-' . $aa . '-12';
         } else {
             $classes[] = 'col-' . $aa . '-' . ${$aa};
         }
     }
-    $arr2 = array('mdoff', 'smoff', 'xsoff', 'lgoff');
+    // AEA - Horizontal Small Devices
+    // $arr2 = array('mdoff', 'smoff', 'xsoff', 'lgoff');
+    $arr2 = array('mdoff', 'smoff', 'hsoff', 'xsoff', 'lgoff');
     foreach ($arr2 as $k => $aa) {
         $nn = str_replace('off', '', $aa);
         // AEA - Bugfix, user can set offset 0 in order to override other offset
@@ -80,14 +106,18 @@ function osc_theme_column($params, $content = null) {
             $classes[] = 'col-' . $nn . '-offset-' . ${$aa};
         }
     }
-    $arr2 = array('mdhide', 'smhide', 'xshide', 'lghide');
+    // AEA - Horizontal Small Devices
+    // $arr2 = array('mdhide', 'smhide', 'xshide', 'lghide');
+    $arr2 = array('mdhide', 'smhide', 'hshide', 'xshide', 'lghide');
     foreach ($arr2 as $k => $aa) {
         $nn = str_replace('hide', '', $aa);
         if (${$aa} == 'yes') {
             $classes[] = 'hidden-' . $nn;
         }
     }
-    $arr2 = array('mdclear', 'smclear', 'xsclear', 'lgclear');
+    // AEA - Horizontal Small Devices
+    // $arr2 = array('mdclear', 'smclear', 'xsclear', 'lgclear');
+    $arr2 = array('mdclear', 'smclear', 'hsclear', 'xsclear', 'lgclear');
     foreach ($arr2 as $k => $aa) {
         $nn = str_replace('clear', '', $aa);
         if (${$aa} == 'yes') {
@@ -103,7 +133,7 @@ function osc_theme_column($params, $content = null) {
     }
     // AEA - Allow user to set custom HTML tag
     // $result = '<div class="col-lg-' . $lg . ' ' . implode(' ', $classes) . '">';
-    $result = '<' . $tag . ' class="col-lg-' . $lg . ' ' . implode(' ', $classes) . '">';
+    $result = '<' . $tag . ' class="' . implode(' ', $classes) . EBS_CONTAINER_CLASS . '">';
     $result .= do_shortcode($content);
     // AEA - Allow user to set custom HTML tag
     // $result .= '</div>';
@@ -119,65 +149,54 @@ add_shortcode('sub2column', 'osc_theme_column');
 add_shortcode('sub3column', 'osc_theme_column');
 add_shortcode('sub4column', 'osc_theme_column');
 
-
-function osc_theme_one_half($params, $content = null) {
+// AEA - Applying DRY Principle
+function osc_theme_layout($params, $content = null) {
     extract(shortcode_atts(array(
         'md' => '',
+        'hs' => '', // AEA - Horizontal Small Devices
         'sm' => '',
         'xs' => '',
-        'off' => ''
+        'off' => '',
+        'lg' => '',
+        'css_class' => '',
+        'extra' => ''
     ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
+    $cols = 'col-lg-' . $lg;
+    if (!empty($md) && $md != 12) {
+        $cols .= ' col-md-' . $md;
     }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
+    if (!empty($sm) && $sm != 12) {
+        $cols .= ' col-sm-' . $sm;
     }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
+    if (!empty($hs) && $hs != 12) {
+        $cols .= ' col-hs-' . $hs;
     }
-    $result = '<div class="col-lg-6 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . '  one-half">';
+    if (!empty($xs) && $xs != 12) {
+        $cols .= ' col-xs-' . $xs;
+    }
+    // AEA - Horizontal Small Devices
+    // $result = '<div class="col-lg-6 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . '  one-half">';
+    $result = '<div class="' . $cols . ' col-lg-offset-' . $off . ' ' . $extra . ' ' . $css_class . EBS_CONTAINER_CLASS . '">';
     $result .= do_shortcode($content);
     $result .= '</div>';
 
     return $result;
 }
 
+function osc_theme_one_half($params, $content = null) {
+    $params['lg']       = '6';
+    $params['extra']    = 'one-half';
+
+    return osc_theme_layout($params, $content);
+}
+
 add_shortcode('one_half', 'osc_theme_one_half');
 
 function osc_theme_one_half_last($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-6 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-half-last">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '6';
+    $params['extra']    = 'one-half-last';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_half_last', 'osc_theme_one_half_last');
@@ -187,125 +206,37 @@ add_shortcode('one_half_last', 'osc_theme_one_half_last');
  * ********************************************************* */
 
 function osc_theme_one_third($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="sc-column col-lg-4 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' ">'; //one-third
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '4';
+    $params['extra']    = 'sc-column';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_third', 'osc_theme_one_third');
 
 function osc_theme_one_third_last($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-4 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . '  column-last">'; // one-third-last
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '4';
+    $params['extra']    = 'column-last';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_third_last', 'osc_theme_one_third_last');
 
 function osc_theme_two_third($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class=" col-lg-8 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' ">'; //two-third
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '8';
+    $params['extra']    = '';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('two_third', 'osc_theme_two_third');
 
 function osc_theme_two_third_last($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-8 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . '  column-last ">'; //two-third-last
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '8';
+    $params['extra']    = 'column-last';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('two_third_last', 'osc_theme_two_third_last');
@@ -315,281 +246,82 @@ add_shortcode('two_third_last', 'osc_theme_two_third_last');
  * ********************************************************* */
 
 function osc_theme_one_fourth($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-3 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-fourth">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '3';
+    $params['extra']    = 'one-fourth';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_fourth', 'osc_theme_one_fourth');
 
 function osc_theme_one_fourth_last($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-3 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' column-last one-fourth-last">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '3';
+    $params['extra']    = 'column-last one-fourth-last';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_fourth_last', 'osc_theme_one_fourth_last');
 
 function osc_theme_three_fourth($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-3 ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . '  three-fourth">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '3';
+    $params['extra']    = 'three-fourth';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('three_fourth', 'osc_theme_three_fourth');
 
 function osc_theme_three_fourth_last($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-6  ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' column-last three-fourth-last">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '6';
+    $params['extra']    = 'column-last three-fourth-last';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('three_fourth_last', 'osc_theme_three_fourth_last');
 
 function osc_theme_one_fourth_second($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-3  ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-fourth-second">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '3';
+    $params['extra']    = 'one-fourth-second';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_fourth_second', 'osc_theme_one_fourth_second');
 
 function osc_theme_one_fourth_third($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
+    $params['lg']       = '3';
+    $params['extra']    = 'one-fourth-third';
 
-    $result = '<div class="col-lg-3  ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-fourth-third">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
-
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_fourth_third', 'osc_theme_one_fourth_third');
 
 function osc_theme_one_half_second($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-6  ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-half-second">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '6';
+    $params['extra']    = 'one-half-second';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_half_second', 'osc_theme_one_half_second');
 
 function osc_theme_one_third_second($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-4  ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-third-second">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '4';
+    $params['extra']    = 'one-third-second';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_third_second', 'osc_theme_one_third_second');
 
 function osc_theme_one_column($params, $content = null) {
-    extract(shortcode_atts(array(
-        'md' => '',
-        'sm' => '',
-        'xs' => '',
-        'off' => ''
-    ), $params));
-    if ($md == 12) {
-        $mds = '';
-    } else {
-        $mds = 'col-md-' . $md;
-    }
-    if ($sm == 12) {
-        $sms = '';
-    } else {
-        $sms = 'col-sm-' . $sm;
-    }
-    if ($xs == 12) {
-        $xss = '';
-    } else {
-        $xss = 'col-xs-' . $xs;
-    }
-    $result = '<div class="col-lg-12  ' . $mds . ' ' . $sms . ' ' . $xss . ' col-lg-offset-' . $off . ' one-column">';
-    $result .= do_shortcode($content);
-    $result .= '</div>';
+    $params['lg']       = '12';
+    $params['extra']    = 'one-column';
 
-    return $result;
+    return osc_theme_layout($params, $content);
 }
 
 add_shortcode('one_column', 'osc_theme_one_column');

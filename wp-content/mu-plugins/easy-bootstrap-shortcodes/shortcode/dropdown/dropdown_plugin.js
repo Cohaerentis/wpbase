@@ -1,43 +1,19 @@
-var gDropdown={
+var dropdown={
     title:"Button Dropdown Shortcode",
-    id :'#oscitas-form-dropdown'
+    id :'oscitas-form-dropdown',
+    pluginName: 'dropdown'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasDropdown', {
-        init : function(ed, url) {
-            ed.addButton('oscitasdropdown', {
-                title : 'Button Dropdown Shortcode',
-                image : url+'/icon.png',
-                onclick : function() {
-                    create_oscitas_dropdown();
-                    open_dialogue(gDropdown.id);
-                }
-            });
-        },
-        createControl : function(n, cm) {
-            return null;
-        },
-        getInfo : function() {
-            return {
-                longname : "Button Dropdown Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitasdropdown', tinymce.plugins.oscitasDropdown);
+    _create_tinyMCE_options(dropdown);
 })();
 
-
-function create_oscitas_dropdown(){
-    if(jQuery('#oscitas-form-dropdown').length){
-        jQuery('#oscitas-form-dropdown').remove();
+function create_oscitas_dropdown(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-dropdown" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th class="main_dp_th"><label for="oscitas-dropdown-heading" >Dropdown Button Features</label></th>\
 				<td><table class="tb_multiple_column_upper">\
@@ -100,13 +76,13 @@ function create_oscitas_dropdown(){
 			<input type="button" id="oscitas-dropdown-submit" class="button-primary" value="Insert Dropdown" name="submit" />\
 		</p>\
 		</div>');
-			
+
     var table = form.find('table');
     form.appendTo('body').hide();
     form.find('#osc_add_new_dditem').click(function(){
         var item='<tr class="osc_dropdown_list_item"><td class="osc_type_change"><select name="dropdown-item-type[]"  class="oscitas-dropdownitem-type"><option value="menuitem">Menu Item</option><option value="divider">Divider</option></select></td><td class="osc_hide"><input type="text" name="dropdown-item-link[]" class="oscitas-dropdownitem-link" value="#"/></td><td class="osc_hide"><input type="text" name="dropdown-item-title[]" class="oscitas-dropdownitem-title" value="Dropdown Item"/></td><td class="osc_hide"><input type="checkbox" name="dropdown-item-disabled[]" class="oscitas-dropdownitem-disabled" value="disabled"/></td><td><a class="osc_remove_dditem" href="javascript:;" style="text-decoration:none;"><i class="glyphicon  glyphicon-remove"></i></a></td></tr>';
         form.find('#oscitas-append-dropdownitem').append(item);
-                    
+
     });
     jQuery('.osc_remove_dditem').live('click',function(){
         jQuery(this).parent().parent().remove();
@@ -128,7 +104,7 @@ function create_oscitas_dropdown(){
         var split,dropup;
         var type,link,title,disabled;
         var heading= jQuery('#oscitas-dropdown-heading').val();
-       
+
         if(jQuery('#oscitas-dropdown-split').is(":checked")==true){
             split= jQuery('#oscitas-dropdown-split').val();
         } else{
@@ -137,10 +113,12 @@ function create_oscitas_dropdown(){
         var size= jQuery('#oscitas-dropdown-size').val();
         var style= jQuery('#oscitas-dropdown-style').val();
         dropup= 'dropup="'+jQuery('#oscitas-dropdown-dropup').val()+'"';
-       
+
         var cusclass;
         if(table.find('#oscitas-dropdown-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-dropdown-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            // cusclass= ' class="'+table.find('#oscitas-dropdown-class').val()+'"';
+            cusclass= ' css_class="'+table.find('#oscitas-dropdown-class').val()+'"';
         }
         else{
             cusclass='';
@@ -151,15 +129,15 @@ function create_oscitas_dropdown(){
         shortcode += heading+'<br/>';
         shortcode +='[/dropdownhead]<br/>';
         shortcode +='[dropdownbody]<br/>';
-       
+
         jQuery('tr.osc_dropdown_list_item').each(function(index){
-            
+
             type = jQuery(this).find('.oscitas-dropdownitem-type').val();
             link = jQuery(this).find('.oscitas-dropdownitem-link').val();
             title = jQuery(this).find('.oscitas-dropdownitem-title').val();
-           
+
             if(jQuery(this).find('.oscitas-dropdownitem-disabled').is(":checked")==true){
-                disabled='disabled="'+jQuery(this).find('.oscitas-dropdownitem-disabled').val()+'"'; 
+                disabled='disabled="'+jQuery(this).find('.oscitas-dropdownitem-disabled').val()+'"';
             } else{
                 disabled='';
             }
@@ -168,17 +146,17 @@ function create_oscitas_dropdown(){
             } else if(type=='menuitem'){
                 shortcode +='[dropdownitem type="'+type+'" link="'+link+'" '+disabled+']'+title+'[/dropdownitem]<br/>';
             }
-            
+
         });
-        
+
         shortcode +='[/dropdownbody]<br/>';
         shortcode +='[/dropdown]';
-        
-			
+
+
         // inserts the shortcode into the active editor
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 
-        close_dialogue(gDropdown.id);
+        close_dialogue(pluginObj.hashId);
     });
 }
 

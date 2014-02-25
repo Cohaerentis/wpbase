@@ -1,42 +1,19 @@
-var gPopover={
+var oscpopover={
     title:"Popover Shortcode",
-    id :'#oscitas-form-popover'
+    id :'oscitas-form-popover',
+    pluginName: 'oscpopover'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasOscPopover', {
-        init: function(ed, url) {
-            ed.addButton('oscitasoscpopover', {
-                title: 'Popover Shortcode',
-                image: url + '/icon.png',
-                onclick: function() {
-                    create_oscitas_popover();
-                    open_dialogue(gPopover.id);
-                }
-            });
-        },
-        createControl: function(n, cm) {
-            return null;
-        },
-        getInfo: function() {
-            return {
-                longname: "Popover Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitasoscpopover', tinymce.plugins.oscitasOscPopover);
+    _create_tinyMCE_options(oscpopover);
 })();
 
-function create_oscitas_popover(){
-    if(jQuery('#oscitas-form-popover').length){
-        jQuery('#oscitas-form-popover').remove();
+function create_oscitas_oscpopover(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-popover" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th><label for="oscitas-popover-style">Popover Style:</label></th>\
 				<td><select name="oscitas-popover-style" id="oscitas-popover-style">\
@@ -111,7 +88,7 @@ function create_oscitas_popover(){
     var colors = ['color', 'bgcolor'];
     jQuery('#oscitas-table tr:visible:even').css('background', '#F0F0F0');
     jQuery('#oscitas-table tr:visible:odd').css('background', '#DADADD');
-    
+
 
     // handles the click event of the submit button
     form.find('#oscitas-popover-submit').click(function() {
@@ -120,13 +97,14 @@ function create_oscitas_popover(){
         // but well, this gets the job done nonetheless
         var cusclass='';
         if(table.find('#oscitas-popover-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-popover-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            cusclass= ' css_class="'+table.find('#oscitas-popover-class').val()+'"';
         }
         var shortcode = '[popover'+cusclass;
         shortcode += ' title="' + table.find('#oscitas-popover-title').val();
 
         shortcode += '" ';
-        
+
         shortcode += ' pop_content="' + table.find('#oscitas-popover-content').val();
 
         shortcode += '" ';
@@ -154,7 +132,7 @@ function create_oscitas_popover(){
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 
         // closes fancybox
-        close_dialogue(gPopover.id);
+        close_dialogue(pluginObj.hashId);
     });
 }
 

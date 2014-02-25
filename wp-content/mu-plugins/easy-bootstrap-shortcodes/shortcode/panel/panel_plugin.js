@@ -1,42 +1,19 @@
-var gPanel={
+var panel={
     title:"Panel Shortcode",
-    id :'#oscitas-form-panel'
+    id :'oscitas-form-panel',
+    pluginName: 'panel'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasPanel', {
-        init : function(ed, url) {
-            ed.addButton('oscitaspanel', {
-                title : 'Panel Shortcode',
-                image : url+'/icon.png',
-                onclick : function() {
-                    create_oscitas_panel();
-                    open_dialogue(gPanel.id);
-                }
-            });
-        },
-        createControl : function(n, cm) {
-            return null;
-        },
-        getInfo : function() {
-            return {
-                longname : "Panel Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitaspanel', tinymce.plugins.oscitasPanel);
+    _create_tinyMCE_options(panel);
 })();
 
-function create_oscitas_panel(){
-    if(jQuery('#oscitas-form-panel').length){
-        jQuery('#oscitas-form-panel').remove();
+function create_oscitas_panel(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-panel" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th><label for="oscitas-type">Style</label></th>\
 				<td><select name="type" id="oscitas-panel-type">\
@@ -64,10 +41,10 @@ function create_oscitas_panel(){
 			<input type="button" id="oscitas-submit" class="button-primary" value="Insert Panel" name="submit" />\
 		</p>\
 		</div>');
-		
+
     var table = form.find('table');
     form.appendTo('body').hide();
-		
+
     // handles the click event of the submit button
     form.find('#oscitas-submit').click(function(){
         // defines the options and their default values
@@ -75,7 +52,8 @@ function create_oscitas_panel(){
         // but well, this gets the job done nonetheless
         var cusclass='';
         if(table.find('#oscitas-panel-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-panel-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            cusclass= ' css_class="'+table.find('#oscitas-panel-class').val()+'"';
         }
         var shortcode = '[panel style="'+table.find('#oscitas-panel-type').val()+ '"'+cusclass+']';
         shortcode += '<br/>[panel-header]<br/>Heading goes here<br/>[/panel-header]';
@@ -83,11 +61,11 @@ function create_oscitas_panel(){
         shortcode += '<br/>[panel-content]<br/>Content goes here<br/>[/panel-content]';
         shortcode += (table.find('#oscitas-panel-footer').prop('checked')? '<br/>[panel-footer]<br/>Footer goes here<br/>[/panel-footer]': '');
         shortcode += '<br/>[/panel]';
-			
+
         // inserts the shortcode into the active editor
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-			
-        close_dialogue(gPanel.id);
+
+        close_dialogue(pluginObj.hashId);
     });
 }
 

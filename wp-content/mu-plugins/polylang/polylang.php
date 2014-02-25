@@ -2,7 +2,7 @@
 /*
 Plugin Name: Polylang
 Plugin URI: http://polylang.wordpress.com/
-Version: 1.3.1
+Version: 1.4.1
 Author: Frédéric Demarle
 Description: Adds multilingual capability to WordPress
 Text Domain: polylang
@@ -10,7 +10,7 @@ Domain Path: /languages
 */
 
 /*
- * Copyright 2011-2013 Frédéric Demarle
+ * Copyright 2011-2014 Frédéric Demarle
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ Domain Path: /languages
  *
  */
 
-define('POLYLANG_VERSION', '1.3.1');
-define('PLL_MIN_WP_VERSION', '3.1');
+define('POLYLANG_VERSION', '1.4.1');
+define('PLL_MIN_WP_VERSION', '3.5');
 
 define('POLYLANG_BASENAME', plugin_basename(__FILE__)); // plugin name as known by WP
 
@@ -86,9 +86,9 @@ class Polylang {
         if (isset($_GET['action'], $_GET['plugin']) && 'deactivate' == $_GET['action'] && plugin_basename(__FILE__) == $_GET['plugin'])
             return;
 
-        // avoid loading polylang admin for frontend ajax requests if 'pll_load_front' is set (thanks to g100g)
+        // avoid loading polylang admin for frontend ajax requests
         if (!defined('PLL_AJAX_ON_FRONT'))
-            define('PLL_AJAX_ON_FRONT', isset($_REQUEST['pll_load_front']));
+            define('PLL_AJAX_ON_FRONT', defined('DOING_AJAX') && DOING_AJAX && empty($_REQUEST['pll_ajax_backend']));
 
         if (!defined('PLL_ADMIN'))
             define('PLL_ADMIN', defined('DOING_CRON') || (is_admin() && !PLL_AJAX_ON_FRONT));
@@ -155,7 +155,6 @@ class Polylang {
      */
     public function activate() {
         global $wp_version;
-
         // AEA - load_plugin_textdomain('polylang', false, basename(POLYLANG_DIR).'/languages'); // plugin i18n
         load_muplugin_textdomain('polylang', basename(POLYLANG_DIR).'/languages'); // plugin i18n
 
@@ -163,9 +162,9 @@ class Polylang {
             die (sprintf('<p style = "font-family: sans-serif; font-size: 12px; color: #333; margin: -5px">%s</p>',
                          sprintf(__('You are using WordPress %s. Polylang requires at least WordPress %s.', 'polylang'),
                                  esc_html($wp_version),
-					PLL_MIN_WP_VERSION
-				)
-			));
+                    PLL_MIN_WP_VERSION
+                )
+            ));
 
         $this->do_for_all_blogs('activate');
     }
@@ -176,6 +175,8 @@ class Polylang {
      * @since 0.5
      */
     protected function _activate() {
+        global $polylang;
+
         if ($options = get_option('polylang')) {
             // plugin upgrade
             if (version_compare($options['version'], POLYLANG_VERSION, '<')) {
@@ -202,10 +203,12 @@ class Polylang {
             update_option('polylang', $options);
         }
 
-      // add our rewrite rules
-        $this->get_links_model(new PLL_Admin_Model($options), $options);
+        // always provide a global $polylang object and add our rewrite rules if needed
+        $polylang = new StdClass();
+        $polylang->options = &$options;
+        $polylang->model = new PLL_Admin_Model($options);
+        $polylang->links_model = $this->get_links_model($polylang->model, $options);
         flush_rewrite_rules();
-
    }
 
     /*
@@ -249,8 +252,10 @@ class Polylang {
     public function autoload($class) {
         $class = str_replace('_', '-', strtolower(substr($class, 4)));
         foreach (array(PLL_INC, PLL_FRONT_INC, PLL_ADMIN_INC) as $path)
-            if (file_exists($file = "$path/$class.php"))
+            if (file_exists($file = "$path/$class.php")) {
                 require_once($file);
+                break;
+            }
     }
 
     /*
@@ -318,8 +323,8 @@ function load_polylang() {
     // AEA - Check if already activated
     $polylang_mu_activated = get_option('polylang_mu_activated');
     if (empty($polylang_mu_activated)) {
-    	// AEA - If not activated, activate it
-    	$tn_pl->activate();
+        // AEA - If not activated, activate it
+        $tn_pl->activate();
         update_option('polylang_mu_activated', true);
     }
 }

@@ -7,12 +7,14 @@
 function osc_theme_labels($params, $content = 'Label') {
     extract(shortcode_atts(array(
                 'type' => 'label-default',
-                'class' => ''
+                // AEA - Rename 'class' parameter by 'css_class'
+                'css_class' => ''
                     ), $params));
     $out = '';
     $content = str_replace("<br />", '', $content);
     $content = str_replace("<br />\n", '', $content);
-    $out = '<span class="label ' . $type . ' ' . $class . '">' . do_shortcode($content) . '</span>';
+    // AEA - Rename 'class' parameter by 'css_class'
+    $out = '<span class="label ' . $type . ' ' . $css_class . EBS_CONTAINER_CLASS.'">' . do_shortcode($content) . '</span>';
     return $out;
 }
 

@@ -71,12 +71,12 @@ class PLL_Choose_Lang_Url extends PLL_Choose_lang {
 	public function check_language_code_in_url() {
 		if (is_single() || is_page()) {
 			global $post;
-			if (isset($post->ID) && in_array($post->post_type, $this->model->post_types))
+			if (isset($post->ID) && $this->model->is_translated_post_type($post->post_type))
 				$language = $this->model->get_post_language((int)$post->ID);
 		}
 		elseif (is_category() || is_tag() || is_tax()) {
 			$obj = $GLOBALS['wp_query']->get_queried_object();
-			if (in_array($obj->taxonomy, $this->model->taxonomies))
+			if ($this->model->is_translated_taxonomy($obj->taxonomy))
 				$language = $this->model->get_term_language((int)$obj->term_id);
 		}
 
@@ -88,8 +88,11 @@ class PLL_Choose_Lang_Url extends PLL_Choose_lang {
 
 			$requested_url  = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . str_replace($languages, '', $_SERVER['REQUEST_URI']);
 			$redirect_url = $this->links_model->add_language_to_link($requested_url, $language);
-			wp_redirect($redirect_url, 301);
-			exit;
+
+			if ($requested_url != $redirect_url) {
+				wp_redirect($redirect_url, 301);
+				exit;
+			}
 		}
 	}
 }

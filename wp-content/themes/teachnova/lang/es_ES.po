@@ -120,7 +120,7 @@ msgstr "Agregar todas las páginas publicadas a la Navegación Primaria"
 
 #: lib/cleanup.php:210
 msgid "Continued"
-msgstr "Continuado"
+msgstr "Leer más"
 
 #: lib/init.php:11
 msgid "Primary Navigation"

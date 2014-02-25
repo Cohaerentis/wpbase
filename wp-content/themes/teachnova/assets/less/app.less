@@ -3,88 +3,59 @@
  */
 
 @import "bootstrap/bootstrap.less";
+// NOTE : Purchase Glyphicons and copy font files to its folder
+// @import "glyphicons/glyphicons.less";
+// @import "glyphicons/social.less";
+// @import "glyphicons/filetypes.less";
+// @import "glyphicons/extras.less";
+@import "font-awesome/font-awesome.less";
 
-/* ==========================================================================
-   Base
-   ========================================================================== */
+// Common rules
+@import "app/variables.less";
+@import "app/mixins.less";
+@import "app/base.less";
+@import "app/common.less";
 
-body { }
+// Shortcode specific rules
+@import "app/shortcodes.less";
 
+// Template specific rules
+@import "app/archive.less";
 
+// Post-type specific rules
+@import "app/page.less";
+@import "app/post.less";
 
-/* ==========================================================================
-   Header
-   ========================================================================== */
+// Taxonomy specific rules
 
-.banner { }
+// Page specific rules
+@import "app/home.less";
 
-
-
-/* ==========================================================================
-   Content
-   ========================================================================== */
-
-.content { }
-
-
-
-/* ==========================================================================
-   Primary Content
-   ========================================================================== */
-
-.main { }
-
-/* Gallery Shortcode */
-.gallery-row { padding: 15px 0; }
-
+// Media specific rules
+@import "app/print.less";
+@import "app/print-portrait.less";
+@import "app/print-landscape.less";
 
 
-/* ==========================================================================
-   Sidebar
-   ========================================================================== */
+//
+// Mobile first desing, so declare mobile rules and then the other sizes by media queries
+// Template :
+// .template {
+//    /* rules for mobile vertical (< 480) */
+//
+//    @media (min-width: @screen-hs-min) {
+//       /* rules for mobile horizontal (480 > 768)  */
+//    }
+//    @media (min-width: @screen-sm-min) {
+//       /* rules for tablet (768 > 992) */
+//    }
+//    @media (min-width: @screen-md-min) {
+//       /* rules for desktop (992 > 1200) */
+//    }
+//    @media (min-width: @screen-lg-min) {
+//       /* rules for large (> 1200) */
+//    }
+// }
+//
+//
 
-.sidebar { }
-
-
-
-/* ==========================================================================
-   Posts
-   ========================================================================== */
-
-.hentry header { }
-.hentry time { }
-.hentry .byline { }
-.hentry .entry-content { }
-.hentry footer { }
-
-
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
-.content-info { }
-
-
-
-/* ==========================================================================
-   WordPress Generated Classes
-   See: http://codex.wordpress.org/CSS#WordPress_Generated_Classes
-   ========================================================================== */
-
-.aligncenter { display: block; margin: 0 auto; }
-.alignleft { float: left; }
-.alignright { float: right; }
-figure.alignnone { margin-left: 0; margin-right: 0; }
-
-
-
-/* ==========================================================================
-   Media Queries
-   ========================================================================== */
-
-@media (min-width: @screen-sm-min) { }
-
-@media (min-width: @screen-md-min) { }
-
-@media (min-width: @screen-lg-min) { }

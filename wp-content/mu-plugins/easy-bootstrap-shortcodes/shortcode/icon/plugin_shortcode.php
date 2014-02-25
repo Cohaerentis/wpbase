@@ -8,7 +8,8 @@ function osc_theme_icon($params, $content = null) {
     extract(shortcode_atts(array(
         'type' => '',
         'color'=>'',
-        'class' => '',
+         // AEA - Rename 'class' parameter by 'css_class'
+        'css_class' => '',
         'fontsize'=>''
     ), $params));
     if($color!=''){
@@ -17,7 +18,8 @@ function osc_theme_icon($params, $content = null) {
     if($fontsize!=''){
         $fontsize=' font-size:'.$fontsize.'px;';
     }
-    $out = '<i class="glyphicon ' . $type . ' ' . $class . '" style="'.$color.$fontsize.'"></i>';
+    // AEA - Rename 'class' parameter by 'css_class'
+    $out = '<i class="glyphicon ' . $type . ' ' . $css_class . '" style="'.$color.$fontsize.'"></i>';
     return $out;
 }
 

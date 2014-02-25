@@ -1,42 +1,19 @@
-var gWell={
+var well={
     title:"Well Shortcode",
-    id :'#oscitas-form-well'
+    id :'oscitas-form-well',
+    pluginName: 'well'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasWell', {
-        init : function(ed, url) {
-            ed.addButton('oscitaswell', {
-                title : 'Well Shortcode',
-                image : url+'/icon.png',
-                onclick : function() {
-                    create_oscitas_well();
-                    open_dialogue(gWell.id);
-                }
-            });
-        },
-        createControl : function(n, cm) {
-            return null;
-        },
-        getInfo : function() {
-            return {
-                longname : "Well Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitaswell', tinymce.plugins.oscitasWell);
+    _create_tinyMCE_options(well);
 })();
 
-function create_oscitas_well(){
-    if(jQuery('#oscitas-form-well').length){
-        jQuery('#oscitas-form-well').remove();
+function create_oscitas_well(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-well" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th><label for="oscitas-well-type">Well Type:</label></th>\
 				<td><select name="type" id="oscitas-well-type">\
@@ -61,18 +38,19 @@ function create_oscitas_well(){
 			<input type="button" id="oscitas-well-submit" class="button-primary" value="Insert Well" name="submit" />\
 		</p>\
 		</div>');
-		
+
     var table = form.find('table');
     form.appendTo('body').hide();
-   
 
-        
-		
+
+
+
     // handles the click event of the submit button
     form.find('#oscitas-well-submit').click(function(){
         var cusclass='';
         if(table.find('#oscitas-well-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-well-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            cusclass= ' css_class="'+table.find('#oscitas-well-class').val()+'"';
         }
         var shortcode = '[well type="'+jQuery('#oscitas-well-type').val()+'"'+cusclass+']<br class="osc"/>';
         shortcode += jQuery('#oscitas-well-content').val()+'<br class="osc"/>';
@@ -80,9 +58,9 @@ function create_oscitas_well(){
 
         // inserts the shortcode into the active editor
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-			
+
         // closes fancybox
-        close_dialogue(gWell.id);
+        close_dialogue(pluginObj.hashId);
     });
 }
 

@@ -8,12 +8,14 @@ function osc_theme_popover($params, $content = 'Popover') {
                 'style' => '',
                 'size' => '',
                 'type' => '',
-                'class' => ''
+                // AEA - Rename 'class' parameter by 'css_class'
+                'css_class' => ''
                     ), $params));
     $out = '';
-    $out = '<button class="osc_popover btn ' . $size . ' ' . $type . ' ' . $class . '" data-content="' . $pop_content . '" data-placement="' . $style . '" data-toggle="popover" data-trigger="' . $trigger . '" data-container="body" type="button" data-title="' . $title . '"> ' . do_shortcode($content) . ' </button>';
+    // AEA - Rename 'class' parameter by 'css_class'
+    $out = '<button class="osc_popover btn ' . $size . ' ' . $type . ' ' . $css_class .EBS_CONTAINER_CLASS. '" data-content="' . $pop_content . '" data-placement="' . $style . '" data-toggle="popover" data-trigger="' . $trigger . '" data-container="body" type="button" data-title="' . $title . '"> ' . do_shortcode($content) . ' </button>';
 
-
+if(EBS_POPOVER_TEMPLATE==''){
     $out .= "
     <script>
        jQuery(document).ready(function(){
@@ -22,6 +24,16 @@ function osc_theme_popover($params, $content = 'Popover') {
     </script>
     ";
 
+
+} else{
+    $out .= "
+    <script>
+       jQuery(document).ready(function(){
+        jQuery('.osc_popover').popover({template:'".EBS_POPOVER_TEMPLATE."'});
+        });
+    </script>
+    ";
+}
     return $out;
 }
 

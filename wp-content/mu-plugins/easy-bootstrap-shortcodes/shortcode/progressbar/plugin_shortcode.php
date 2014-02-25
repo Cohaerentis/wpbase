@@ -9,13 +9,15 @@ function osc_theme_progressbar($params, $content = null) {
 				'value' => '50',
 				'barstyle' => '',
 				'bartype' => '',
-				'class' => '',
+                                // AEA - Rename 'class' parameter by 'css_class'
+				'css_class' => '',
 				'label' => ''
 			), $params));
-	$out = $label != '' ? '<div class="osc_bar_outer"><label class="osc-progressbar-label">' . $label . '</label>' : '';
-	$out.='<div class="progress ' . $barstyle . ' ' . $class . ' osc-progressbar">
-  <div class="progress-bar ' . $bartype . '"  role="progressbar" aria-valuenow="' . $value . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $value . '%">
-    <span class="sr-only">' . $value . '% Complete</span>
+	$out = $label != '' ? '<div class="osc_bar_outer"><label class="osc-progressbar-label'.EBS_CONTAINER_CLASS.'">' . $label . '</label>' : '';
+        // AEA - Rename 'class' parameter by 'css_class'
+	$out.='<div class="progress ' . $barstyle . ' ' . $css_class . ' osc-progressbar'.EBS_CONTAINER_CLASS.'">
+  <div class="progress-bar ' . $bartype . EBS_CONTAINER_CLASS.'"  role="progressbar" aria-valuenow="' . $value . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $value . '%">
+    <span class="sr-only'.EBS_CONTAINER_CLASS.'">' . $value . '% Complete</span>
   </div>
 </div>';
 	$out .= $label != '' ?'</div>':'';

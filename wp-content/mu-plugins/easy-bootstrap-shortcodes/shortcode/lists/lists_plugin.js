@@ -1,42 +1,19 @@
-var gLists={
+var lists={
     title:"List Group Shortcode",
-    id :'#oscitas-form-lists'
+    id :'oscitas-form-lists',
+    pluginName: 'lists'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasLists', {
-        init : function(ed, url) {
-            ed.addButton('oscitaslists', {
-                title : 'List Group Shortcode',
-                image : url+'/icon.png',
-                onclick : function() {
-                    create_oscitas_lists();
-                    open_dialogue(gLists.id);
-                }
-            });
-        },
-        createControl : function(n, cm) {
-            return null;
-        },
-        getInfo : function() {
-            return {
-                longname : "List Group Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitaslists', tinymce.plugins.oscitasLists);
+    _create_tinyMCE_options(lists);
 })();
 
-function create_oscitas_lists(){
-    if(jQuery('#oscitas-form-lists').length){
-        jQuery('#oscitas-form-lists').remove();
+function create_oscitas_lists(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-lists" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th><label for="oscitas-type">Lists style</label></th>\
 				<td><select name="type" id="oscitas-type">\
@@ -63,21 +40,22 @@ function create_oscitas_lists(){
 			<input type="button" id="oscitas-submit" class="button-primary" value="Insert List" name="submit" />\
 		</p>\
 		</div>');
-		
+
     var table = form.find('table');
     form.appendTo('body').hide();
-		
+
     // handles the click event of the submit button
     form.find('#oscitas-submit').click(function(){
         // defines the options and their default values
         // again, this is not the most elegant way to do this
         // but well, this gets the job done nonetheless
-        var options = { 
+        var options = {
             'type'       : 'arrow'
         },list=0,list_type;
         var cusclass='';
         if(table.find('#oscitas-list-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-list-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            cusclass= ' css_class="'+table.find('#oscitas-list-class').val()+'"';
         }
         var shortcode = '[list'+cusclass;
         var list_item=jQuery('#oscitas-list-item').val();
@@ -85,8 +63,8 @@ function create_oscitas_lists(){
             list=list_item;
         } else{
             list=3;
-        }	
-     
+        }
+
 
         shortcode += ']<br/>';
         if(table.find('#oscitas-type').val()!=''){
@@ -96,14 +74,14 @@ function create_oscitas_lists(){
             list_type='';
         }
         for(var i=1;i<=list;i++){
-            shortcode +='[li'+list_type+']your list content[/li]<br/>' 
+            shortcode +='[li'+list_type+']your list content[/li]<br/>'
         }
         shortcode +='[/list]';
-			
+
         // inserts the shortcode into the active editor
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 
-        close_dialogue(gLists.id);
+        close_dialogue(pluginObj.hashId);
     });
 }
 

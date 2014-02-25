@@ -7,12 +7,14 @@
 function osc_theme_well($params, $content = 'Label') {
     extract(shortcode_atts(array(
                 'type' => '',
-                'class' => ''
+                // AEA - Rename 'class' parameter by 'css_class'
+                'css_class' => ''
                     ), $params));
     $out = '';
     $content = str_replace('<br class="osc" />', '', $content);
     $content = str_replace('<br class="osc" />\n', '', $content);
-    $out = '<div class="well ' . $type . ' ' . $class . '">' . do_shortcode($content) . '</div>';
+    // AEA - Rename 'class' parameter by 'css_class'
+    $out = '<div class="well ' . $type . ' ' . $css_class .EBS_CONTAINER_CLASS. '">' . do_shortcode($content) . '</div>';
     return $out;
 }
 

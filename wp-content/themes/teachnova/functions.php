@@ -15,8 +15,15 @@ require_once locate_template('/lib/gallery.php');         // Custom [gallery] mo
 require_once locate_template('/lib/comments.php');        // Custom comments modifications
 require_once locate_template('/lib/relative-urls.php');   // Root relative URLs
 require_once locate_template('/lib/widgets.php');         // Sidebars and widgets
+require_once locate_template('/lib/shortcodes.php');      // Shortcodes
 require_once locate_template('/lib/scripts.php');         // Scripts and stylesheets
 require_once locate_template('/lib/custom.php');          // Custom functions
+
+require_once locate_template('/lib/qr.php');              // Teachnova QR images (using PHP QR Code Library)
+TN_QR::$baseurl = '/media/qr';
+TN_QR::$basepath = ABSPATH . '/media/qr';
+
+require_once locate_template('/lib/vcard.php');           // Teachnova vCard
 
 /* Produces a dump on the state of WordPress when a not found error occurs */
 /* useful when debugging permalink issues, rewrite rule trouble, place inside functions.php */

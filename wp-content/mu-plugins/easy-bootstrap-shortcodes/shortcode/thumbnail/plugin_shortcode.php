@@ -7,7 +7,8 @@
 function osc_theme_oscitasthumbnail($params, $content = 'Label') {
     extract(shortcode_atts(array(
                 'src' => '',
-                'class' => '',
+                // AEA - Rename 'class' parameter by 'css_class'
+                'css_class' => '',
                 'link' => '',
                 'border'=>''
                     ), $params));
@@ -19,11 +20,12 @@ function osc_theme_oscitasthumbnail($params, $content = 'Label') {
 	}
 
 
-	//$out = ' <div class="img-thumbnail ' . $class . '">';
+        // AEA - Rename 'class' parameter by 'css_class'
+	//$out = ' <div class="img-thumbnail ' . $css_class . '">';
 	if ($link != '') {
 		$out .='<a href="' . $link . '">';
 	}
-	$out .= '<img src="' . $src . '" class="' . $borderClass . ' oscitas-res-image">';
+	$out .= '<img src="' . $src . '" class="' . $borderClass.EBS_CONTAINER_CLASS . ' oscitas-res-image">';
 	if ($link != '') {
 		$out .='</a>';
 	}

@@ -1,42 +1,19 @@
-var gTooltip={
+var tooltip={
     title:"Tooltip Image Shortcode",
-    id :'#oscitas-form-tooltip'
+    id :'oscitas-form-tooltip',
+    pluginName: 'tooltip'
 };
 (function() {
-    tinymce.create('tinymce.plugins.oscitasTooltip', {
-        init: function(ed, url) {
-            ed.addButton('oscitastooltip', {
-                title: 'Tooltip Shortcode',
-                image: url + '/icon.png',
-                onclick: function() {
-                    create_oscitas_tooltip();
-                    open_dialogue(gTooltip.id);
-                }
-            });
-        },
-        createControl: function(n, cm) {
-            return null;
-        },
-        getInfo: function() {
-            return {
-                longname: "Tooltip Shortcode",
-                author : 'Oscitas Themes',
-                authorurl : 'http://www.oscitasthemes.com/',
-                infourl : 'http://www.oscitasthemes.com/',
-                version : "2.0.0"
-            };
-        }
-    });
-    tinymce.PluginManager.add('oscitastooltip', tinymce.plugins.oscitasTooltip);
+    _create_tinyMCE_options(tooltip);
 })();
 
-function create_oscitas_tooltip(){
-    if(jQuery('#oscitas-form-tooltip').length){
-        jQuery('#oscitas-form-tooltip').remove();
+function create_oscitas_tooltip(pluginObj){
+    if(jQuery(pluginObj.hashId).length){
+        jQuery(pluginObj.hashId).remove();
     }
     // creates a form to be displayed everytime the button is clicked
     // you should achieve this using AJAX instead of direct html code like this
-    var form = jQuery('<div id="oscitas-form-tooltip" class="oscitas-container"><table id="oscitas-table" class="form-table">\
+    var form = jQuery('<div id="'+pluginObj.id+'" class="oscitas-container" title="'+pluginObj.title+'"><table id="oscitas-table" class="form-table">\
 			<tr>\
 				<th><label for="oscitas-tooltip-style">Tooltip Style:</label></th>\
 				<td><select name="type" id="oscitas-tooltip-style">\
@@ -93,10 +70,9 @@ function create_oscitas_tooltip(){
         } else{
             table.find('#oscitas-tooltip-link-tr').hide();
             table.find('#oscitas-tooltip-link').val('');
-           
         }
-        jQuery('#oscitas-table tr:visible:even').css('background', '#F0F0F0');
-        jQuery('#oscitas-table tr:visible:odd').css('background', '#DADADD');
+        jQuery(this).parents('#oscitas-table').find('tr:visible:even').css('background', '#F0F0F0');
+        jQuery(this).parents('#oscitas-table').find('tr:visible:odd').css('background', '#DADADD');
     })
 
     // handles the click event of the submit button
@@ -106,13 +82,14 @@ function create_oscitas_tooltip(){
         // but well, this gets the job done nonetheless
         var cusclass='';
         if(table.find('#oscitas-tooltip-class').val()!=''){
-            cusclass= ' class="'+table.find('#oscitas-tooltip-class').val()+'"';
+            // AEA - Rename 'class' parameter by 'css_class'
+            cusclass= ' css_class="'+table.find('#oscitas-tooltip-class').val()+'"';
         }
         var shortcode = '[tooltip';
         shortcode += ' type="' + table.find('#oscitas-tooltip-type').val();
 
         shortcode += '" ';
-        
+
         shortcode += ' link="' + table.find('#oscitas-tooltip-link').val();
 
         shortcode += '" ';
@@ -120,11 +97,11 @@ function create_oscitas_tooltip(){
 
         shortcode += '" ';
         shortcode += ' style="' + table.find('#oscitas-tooltip-style').val();
-        
+
         shortcode += '" ';
 
         shortcode += cusclass;
-      
+
         shortcode += ']';
         shortcode+= table.find('#oscitas-tooltip-link-text').val();
         shortcode+='[/tooltip]';
@@ -133,7 +110,7 @@ function create_oscitas_tooltip(){
         tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 
         // closes fancybox
-        close_dialogue(gTooltip.id);
+        close_dialogue(pluginObj.hashId);
     });
 }
 
